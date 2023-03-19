@@ -1,0 +1,14 @@
+name: clear cache
+
+on:
+  schedule:
+    - cron: '0 0 * * SUN' # Runs once a day (https://crontab.guru/once-a-day)
+  workflow_dispatch:
+jobs:
+  clear:
+    name: Clear cache
+    runs-on: ubuntu-latest
+    steps:
+      - uses: MyAlbum/purge-cache@v1
+        with:
+          max-age: 604800
