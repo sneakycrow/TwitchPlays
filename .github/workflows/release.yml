@@ -61,4 +61,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: upload artifacts
-        run: gh upload ${{ github.ref_name }} ${{ steps.tauri-build.outputs.artifactPaths }}
+        run: gh release upload ${{ github.ref_name }} ${{ steps.tauri-build.outputs.artifactPaths }}
