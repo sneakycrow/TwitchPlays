@@ -98,4 +98,3 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           includeDebug: false
           includeRelease: true
-          releaseId: ${{ inputs.milestoneId }}
