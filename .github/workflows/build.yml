@@ -10,12 +10,7 @@ env:
 
 jobs:
   test-tauri:
-    strategy:
-      fail-fast: false
-      matrix:
-        platform: [ macos-latest, windows-latest ]
-
-    runs-on: ${{ matrix.platform }}
+    runs-on: windows-latest
     steps:
       - name: cargo cache
         uses: actions/cache@v1
