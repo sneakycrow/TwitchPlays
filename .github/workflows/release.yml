@@ -1,20 +1,60 @@
 name: release
+
 on:
-  release:
-    types:
-      - prereleased
-      - released
+  milestone:
+    types: [ closed ]
   workflow_dispatch:
-env:
-  CARGO_TERM_COLOR: always
+    inputs:
+      milestoneId:
+        description: 'Milestone ID'
+        required: true
+        default: '1'
 
 jobs:
-  build:
+  create-release:
+    name: create release
+    runs-on: ubuntu-22.04
+    outputs:
+      notes: ${{ steps.cat-notes-md.outputs.notes_markdown }}
+    steps:
+      - uses: actions/checkout@master
 
+      - name: generate notes
+        uses: docker://decathlon/release-notes-generator-action:2.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OUTPUT_FOLDER: temp_release_notes
+          USE_MILESTONE_TITLE: "true"
+          FILENAME: notes.md
+
+      - name: create release
+        id: create-release
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const fs = require('fs');
+            let notes = fs.readFileSync('temp_release_notes/notes.md', 'utf8').toString();
+            const { data } = await github.rest.repos.createRelease({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              tag_name: `v${{ inputs.milestoneId }}`,
+              name: `v${{ inputs.milestoneId }}`,
+              body: notes,
+              draft: true,
+              prerelease: false
+            })
+            return data.id
+  
+
+  build:
+    name: build application
     permissions:
       contents: write
     runs-on: windows-latest
+    needs: [ create-release ]
     steps:
+      - uses: actions/checkout@v3
+
       - name: cargo cache
         uses: actions/cache@v1
         with:
@@ -42,8 +82,6 @@ jobs:
             ${{ runner.os }}-node-modules-${{ hashFiles('**/ui/package.json') }}
             ${{ runner.os }}-node-modules
 
-      - uses: actions/checkout@v3
-
       - name: setup node
         uses: actions/setup-node@v3
         with:
@@ -56,9 +94,8 @@ jobs:
         run: cd ui && npm install
 
       - uses: tauri-apps/tauri-action@v0
-        id: tauri-build
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: upload artifacts
-        run: gh upload ${{ github.ref_name }} ${{ steps.tauri-build.outputs.artifactPaths }}
+          includeDebug: true
+          includeRelease: false
+          releaseId: ${{ inputs.milestoneId }}
