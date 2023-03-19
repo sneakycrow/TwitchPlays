@@ -1,5 +1,7 @@
 # editors
 .idea/
 
-# rust output
-target/
+
+# Added by cargo
+
+/target
