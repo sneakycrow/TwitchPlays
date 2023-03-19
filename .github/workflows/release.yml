@@ -61,5 +61,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: upload artifacts
-        if: ${{startsWith(github.ref, 'refs/tags/') }}
         run: gh upload ${{ github.ref_name }} ${{ steps.tauri-build.outputs.artifactPaths }}
