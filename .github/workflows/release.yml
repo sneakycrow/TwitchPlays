@@ -15,7 +15,7 @@ jobs:
     name: create release
     runs-on: ubuntu-22.04
     outputs:
-      notes: ${{ steps.cat-notes-md.outputs.notes_markdown }}
+      release_id: ${{ steps.create-release.outputs.result }}
     steps:
       - uses: actions/checkout@master
 
@@ -98,3 +98,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           includeDebug: false
           includeRelease: true
+          releaseId: ${{ needs.create-release.outputs.release_id }}
