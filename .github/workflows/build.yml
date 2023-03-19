@@ -2,11 +2,19 @@ name: build
 on:
   pull_request:
   workflow_dispatch:
+  workflow_call:
+    secrets:
+      GITHUB_TOKEN:
+        required: true
+
 env:
   CARGO_TERM_COLOR: always
 
+permissions:
+  contents: write
+
 jobs:
-  test-tauri:
+  build-app:
     runs-on: windows-latest
     steps:
       - name: cargo cache
