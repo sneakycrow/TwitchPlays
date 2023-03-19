@@ -1,5 +1,4 @@
 import concurrent.futures
-import random
 import keyboard
 import pydirectinput
 import pyautogui
