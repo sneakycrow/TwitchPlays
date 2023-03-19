@@ -10,10 +10,13 @@ env:
 
 jobs:
   build:
-
-    permissions:
-      contents: write
-    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: [ windows-latest ]
+    outputs:
+      artifacts: ${{ steps.tauri-build.outputs.artifactPaths }}
+    runs-on: ${{ matrix.platform }}
     steps:
       - name: cargo cache
         uses: actions/cache@v1
@@ -60,5 +63,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: upload artifacts
-        run: gh release upload ${{ github.ref_name }} ${{ steps.tauri-build.outputs.artifactPaths }}
+  upload-artifacts:
+    needs: [ build ]
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: write
+    steps:
+      - run: echo ${{ needs.build.outputs.artifacts }}
