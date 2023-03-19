@@ -16,6 +16,10 @@ as to not require the Python runtime.
 
 _You can install the Tauri CLI via `cargo install tauri-cli`_
 
+Install dependencies in the `ui` directory with:
+
+`npm install`
+
 To run the app in development mode run:
 
 `cargo tauri dev`
