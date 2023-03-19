@@ -1,0 +1,5 @@
+# editors
+.idea/
+
+# rust output
+target/
