@@ -3,6 +3,15 @@ on:
   pull_request:
   workflow_dispatch:
   workflow_call:
+    inputs:
+      buildOnly:
+        required: false
+        type: boolean
+        default: true
+      prerelease:
+        required: false
+        type: boolean
+        default: true
 
 env:
   CARGO_TERM_COLOR: always
@@ -13,6 +22,8 @@ permissions:
 jobs:
   build-app:
     runs-on: windows-latest
+    outputs:
+      artifactPaths: ${{ steps.tauri-build.outputs.artifactPaths }}
     steps:
       - name: cargo cache
         uses: actions/cache@v1
@@ -55,7 +66,20 @@ jobs:
         run: cd ui && npm install
 
       - uses: tauri-apps/tauri-action@v0
+        if: ${{ inputs.buildOnly == true }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          includeDebug: true
-          includeRelease: false
+
+      - name: create release notes
+        id: build_changelog
+        if: ${{ inputs.buildOnly != true }}
+        uses: mikepenz/release-changelog-builder-action@{latest-release}
+
+      - uses: tauri-apps/tauri-action@v0
+        if: ${{ inputs.buildOnly != true }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          releaseName: ${{ github.ref_name }}
+          releaseBody: ${{ steps.build_changelog.outputs.changelog }}
+          prerelease: ${{ inputs.prerelease }}
+          releaseDraft: true
