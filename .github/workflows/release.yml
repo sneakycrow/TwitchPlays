@@ -1,0 +1,72 @@
+name: release
+on:
+  release:
+    types:
+      - prereleased
+      - released
+  workflow_dispatch:
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: [ windows-latest ]
+    outputs:
+      artifacts: ${{ steps.tauri-build.outputs.artifactPaths }}
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - name: cargo cache
+        uses: actions/cache@v1
+        with:
+          path: ~/.cargo
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.toml') }}-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.toml') }}
+            ${{ runner.os }}-cargo
+
+      - name: cargo target/ cache
+        uses: actions/cache@v1
+        with:
+          path: target
+          key: ${{ runner.os }}-cargo-target-${{ hashFiles('**/Cargo.toml') }}-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-target-${{ hashFiles('**/Cargo.toml') }}
+            ${{ runner.os }}-cargo-target
+
+      - name: ui/node_modules/ cache
+        uses: actions/cache@v1
+        with:
+          path: ui/node_modules
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/ui/package.json') }}-${{ hashFiles('**/ui/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-modules-${{ hashFiles('**/ui/package.json') }}
+            ${{ runner.os }}-node-modules
+
+      - uses: actions/checkout@v3
+
+      - name: setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: install rust stable
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: install frontend dependencies
+        run: cd ui && npm install
+
+      - uses: tauri-apps/tauri-action@v0
+        id: tauri-build
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  upload-artifacts:
+    needs: [ build ]
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: write
+    steps:
+      - run: echo ${{ needs.build.outputs.artifacts }}
