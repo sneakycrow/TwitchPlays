@@ -1,5 +1,7 @@
 # TwitchPlays
 
+[![build](https://github.com/sneakycrow/TwitchPlays/actions/workflows/build.yml/badge.svg)](https://github.com/sneakycrow/TwitchPlays/actions/workflows/build.yml)
+
 Originally based on [DougDougGithub/TwitchPlays][original-repo], this repository aims to take those scripts and set
 a GUI in front of it, making the user experience a lot friendlier. In addition, it aims to rewrite the original scripts
 as to not require the Python runtime.
@@ -15,6 +17,10 @@ as to not require the Python runtime.
 - Tauri CLI
 
 _You can install the Tauri CLI via `cargo install tauri-cli`_
+
+Install dependencies in the `ui` directory with:
+
+`npm install`
 
 To run the app in development mode run:
 

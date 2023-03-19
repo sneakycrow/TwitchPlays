@@ -3,7 +3,7 @@
     "beforeBuildCommand": "npm run build && npm run export",
     "beforeDevCommand": "npm run dev",
     "devPath": "http://localhost:3000",
-    "distDir": "../out",
+    "distDir": "./ui/out",
     "withGlobalTauri": true
   },
   "package": {
@@ -27,7 +27,7 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "com.tauri.dev",
+      "identifier": "dev.sneakycrow.twitchplays",
       "targets": "all"
     },
     "security": {
