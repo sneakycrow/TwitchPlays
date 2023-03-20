@@ -30,7 +30,7 @@ jobs:
           name: app-artifacts
       - run: ls -a
       - name: upload to github release
-        run: gh release upload ${{ github.ref_name || inputs.release }} target\release\bundle/msi/twitchplays_0.0.0_x64_en-US.msi
+        run: gh release upload ${{ github.ref_name || inputs.release }} twitchplays_0.0.0_x64_en-US.msi
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
