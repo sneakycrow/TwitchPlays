@@ -19,8 +19,6 @@ jobs:
   build:
     runs-on: windows-latest
     name: build binaries
-    outputs:
-      artifactPaths: ${{ steps.tauri.outputs.artifactPaths }}
     steps:
       - uses: actions/checkout@v3
       - name: ~/.cargo/ cache
@@ -67,14 +65,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  upload-artifacts:
-    runs-on: ubuntu-22.04
-    needs:
-      - build
-    steps:
       - name: upload app artifacts
         uses: actions/upload-artifact@v3
         with:
           name: ${{ inputs.artifactName }}
-          path: ${{ needs.build.outputs.artifactPaths }}
+          path: \target\release\bundle\msi\twitchplays_0.0.0_x64_en-US.msi.zip # TODO: Make version dynamic
           retention-days: 1
