@@ -16,8 +16,11 @@ permissions:
   contents: write
 
 jobs:
-  build-app:
+  build:
     runs-on: windows-latest
+    name: build binaries
+    outputs:
+      artifactPaths: ${{ steps.tauri-build.outputs.artifactPaths }}
     steps:
       - uses: actions/checkout@v3
       - name: ~/.cargo/ cache
@@ -64,9 +67,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+  upload-artifacts:
+    runs-on: ubuntu-22.04
+    steps:
       - name: upload app artifacts
         uses: actions/upload-artifact@v3
         with:
           name: ${{ inputs.artifactName }}
-          path: ${{ steps.tauri-build.outputs.artifactPaths }}
+          path: ${{ needs.build.outputs.artifactPaths }}
           retention-days: 1
