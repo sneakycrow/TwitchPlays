@@ -4,14 +4,10 @@ on:
   workflow_dispatch:
   workflow_call:
     inputs:
-      prerelease:
-        required: false
-        type: boolean
-        default: true
-      releaseName:
-        required: false
+      artifactName:
+        required: true
         type: string
-        default: ''
+        default: app-artifacts
 
 env:
   CARGO_TERM_COLOR: always
@@ -22,10 +18,9 @@ permissions:
 jobs:
   build-app:
     runs-on: windows-latest
-    outputs:
-      artifactPaths: ${{ steps.tauri-build.outputs.artifactPaths }}
     steps:
-      - name: cargo cache
+      - uses: actions/checkout@v3
+      - name: ~/.cargo/ cache
         uses: actions/cache@v1
         with:
           path: ~/.cargo
@@ -34,7 +29,7 @@ jobs:
             ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.toml') }}
             ${{ runner.os }}-cargo
 
-      - name: cargo target/ cache
+      - name: target/ cache
         uses: actions/cache@v1
         with:
           path: target
@@ -52,8 +47,6 @@ jobs:
             ${{ runner.os }}-node-modules-${{ hashFiles('**/ui/package.json') }}
             ${{ runner.os }}-node-modules
 
-      - uses: actions/checkout@v3
-
       - name: setup node
         uses: actions/setup-node@v3
         with:
@@ -67,23 +60,13 @@ jobs:
 
       - uses: tauri-apps/tauri-action@v0
         name: building app
-        if: ${{ inputs.releaseName == '' }}
+        id: tauri-build
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: create release notes
-        id: build_changelog
-        if: ${{ inputs.releaseName != '' }}
-        uses: mikepenz/release-changelog-builder-action@v3.7.0
-
-      - uses: tauri-apps/tauri-action@v0
-        name: building app and creating release
-        if: ${{ inputs.releaseName != '' }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: upload app artifacts
+        uses: actions/upload-artifact@v3
         with:
-          tagName: app-v__VERSION__
-          releaseName: 'App v__VERSION__'
-          releaseBody: ${{ steps.build_changelog.outputs.changelog }}
-          prerelease: ${{ inputs.prerelease }}
-          releaseDraft: true
+          name: ${{ inputs.artifactName }}
+          path: ${{ steps.tauri-build.outputs.artifactPaths }}
+          retention-days: 1

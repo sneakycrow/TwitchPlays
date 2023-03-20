@@ -1,22 +1,24 @@
-name: create release
+name: release
 
 on:
   workflow_dispatch:
-    inputs:
-      releaseName:
-        required: true
-        type: string
-        description: Title of the release, generally the version number
-      prerelease:
-        required: false
-        type: boolean
-        description: prerelease?
-        default: true
+  release:
+    types:
+      - prereleased
+      - released
 
 jobs:
-  release:
-    name: draft release
+  build:
+    name: build packages
     uses: ./.github/workflows/build.yml
     with:
-      prerelease: ${{ inputs.prerelease }}
-      releaseName: ${{ inputs.releaseName }}
+      artifactName: release-bundle
+  upload:
+    name: upload binaries
+    runs-on: ubuntu-22.04
+    needs: [ build ]
+    steps:
+      - name: download binaries
+        uses: actions/download-artifact@v3
+        with:
+          name: release-bundle
