@@ -11,7 +11,7 @@ on:
       releaseName:
         required: false
         type: string
-        default: untitled release - ${{ github.ref_name }}
+        default: ''
 
 env:
   CARGO_TERM_COLOR: always
@@ -67,18 +67,18 @@ jobs:
 
       - uses: tauri-apps/tauri-action@v0
         name: building app
-        if: ${{ github.event.inputs.releaseName == '' }}
+        if: ${{ inputs.releaseName == '' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: create release notes
         id: build_changelog
-        if: ${{ github.event.inputs.releaseName != '' }}
+        if: ${{ inputs.releaseName != '' }}
         uses: mikepenz/release-changelog-builder-action@v3.7.0
 
       - uses: tauri-apps/tauri-action@v0
         name: building app and creating release
-        if: ${{ github.event.inputs.releaseName != '' }}
+        if: ${{ inputs.releaseName != '' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           releaseName: ${{ inputs.releaseName }}
