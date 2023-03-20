@@ -2,6 +2,11 @@ name: create release
 
 on:
   workflow_dispatch:
+    inputs:
+      releaseName:
+        required: true
+        type: string
+        description: Title of the release, generally the version number
 
 jobs:
   build:
@@ -10,3 +15,4 @@ jobs:
     with:
       buildOnly: false
       prerelease: ${{ github.event_name == 'prerelease' }}
+      releaseName: ${{ inputs.releaseName }}
