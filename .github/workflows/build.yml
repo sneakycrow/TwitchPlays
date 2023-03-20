@@ -20,7 +20,7 @@ jobs:
     runs-on: windows-latest
     name: build binaries
     outputs:
-      artifactPaths: ${{ steps.tauri-build.outputs.artifactPaths }}
+      artifactPaths: ${{ steps.tauri.outputs.artifactPaths }}
     steps:
       - uses: actions/checkout@v3
       - name: ~/.cargo/ cache
@@ -63,12 +63,14 @@ jobs:
 
       - uses: tauri-apps/tauri-action@v0
         name: building app
-        id: tauri-build
+        id: tauri
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   upload-artifacts:
     runs-on: ubuntu-22.04
+    needs:
+      - build
     steps:
       - name: upload app artifacts
         uses: actions/upload-artifact@v3
