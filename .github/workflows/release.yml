@@ -9,8 +9,8 @@ on:
         description: Title of the release, generally the version number
 
 jobs:
-  build:
-    name: build and publish release
+  release:
+    name: draft release
     uses: ./.github/workflows/build.yml
     with:
       buildOnly: false
