@@ -1,7 +1,14 @@
-name: release
+name: package release
 
 on:
   workflow_dispatch:
+    inputs:
+      release:
+        required: true
+        type: string
+        description: target release to package
+        default: vX.X.X-alpha0
+
   release:
     types:
       - prereleased
@@ -21,3 +28,6 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: app-artifacts
+      - run: ls -a
+      - name: upload to github release
+        run: gh release upload ${{ github.ref_name || inputs.release }} target\release\bundle/msi/twitchplays_0.0.0_x64_en-US.msi
