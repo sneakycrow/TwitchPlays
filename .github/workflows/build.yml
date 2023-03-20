@@ -81,7 +81,9 @@ jobs:
         if: ${{ inputs.releaseName != '' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          releaseName: ${{ inputs.releaseName }}
+        with:
+          tagName: app-v__VERSION__
+          releaseName: 'App v__VERSION__'
           releaseBody: ${{ steps.build_changelog.outputs.changelog }}
           prerelease: ${{ inputs.prerelease }}
           releaseDraft: true
