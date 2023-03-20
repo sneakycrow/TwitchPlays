@@ -1,9 +1,12 @@
-name: release
+name: create release
 
 on:
   workflow_dispatch:
 
 jobs:
-  build-app:
-    name: build artifacts
+  build:
+    name: build and publish release
     uses: ./.github/workflows/build.yml
+    with:
+      buildOnly: false
+      prerelease: ${{ github.event_name == 'prerelease' }}
