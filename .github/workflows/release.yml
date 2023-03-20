@@ -23,7 +23,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: app-artifacts
-      - run: ls -a
+
       - name: upload to github release
         run: gh release upload ${{ github.ref_name }} chats-controller_0.2.2_x64_en-US.msi
         env:
