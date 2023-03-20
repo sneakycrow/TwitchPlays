@@ -11,8 +11,7 @@ jobs:
   build:
     name: build packages
     uses: ./.github/workflows/build.yml
-    with:
-      artifactName: release-bundle
+
   upload:
     name: upload binaries
     runs-on: ubuntu-22.04
@@ -21,4 +20,4 @@ jobs:
       - name: download binaries
         uses: actions/download-artifact@v3
         with:
-          name: release-bundle
+          name: app-artifacts

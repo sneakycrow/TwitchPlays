@@ -3,11 +3,6 @@ on:
   pull_request:
   workflow_dispatch:
   workflow_call:
-    inputs:
-      artifactName:
-        required: true
-        type: string
-        default: app-artifacts
 
 env:
   CARGO_TERM_COLOR: always
@@ -68,6 +63,6 @@ jobs:
       - name: upload app artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ inputs.artifactName }}
+          name: app-artifacts
           path: target\release\bundle/msi/twitchplays_0.0.0_x64_en-US.msi
           retention-days: 1
