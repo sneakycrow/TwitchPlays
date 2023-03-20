@@ -69,5 +69,5 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: ${{ inputs.artifactName }}
-          path: .\target\release\bundle\msi\twitchplays_0.0.0_x64_en-US.msi
+          path: target\release\bundle/msi/twitchplays_0.0.0_x64_en-US.msi
           retention-days: 1
