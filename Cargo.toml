@@ -1,10 +1,10 @@
 [package]
-name = "twitchplays"
+name = "chats-controller"
 version = "0.2.1"
-description = "A Tauri App"
+description = "An application to let live text-based chats send commands to your games"
 authors = ["you"]
-license = ""
-repository = ""
+license = "MIT"
+repository = "sneakycrow/chats-controller"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
