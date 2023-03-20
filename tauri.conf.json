@@ -7,7 +7,7 @@
     "withGlobalTauri": true
   },
   "package": {
-    "productName": "twitchplays",
+    "productName": "chats-controller",
     "version": "0.0.0"
   },
   "tauri": {
@@ -27,7 +27,7 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "dev.sneakycrow.twitchplays",
+      "identifier": "dev.sneakycrow.chats-controller",
       "targets": "all"
     },
     "security": {
@@ -40,7 +40,7 @@
       {
         "fullscreen": false,
         "resizable": true,
-        "title": "twitchplays",
+        "title": "Chats Controller",
         "width": 800,
         "height": 600
       }

@@ -3,19 +3,6 @@ on:
   pull_request:
   workflow_dispatch:
   workflow_call:
-    inputs:
-      buildOnly:
-        required: false
-        type: boolean
-        default: true
-      prerelease:
-        required: false
-        type: boolean
-        default: true
-      releaseName:
-        required: false
-        type: string
-        default: untitled release - ${{ github.ref_name }}
 
 env:
   CARGO_TERM_COLOR: always
@@ -24,12 +11,12 @@ permissions:
   contents: write
 
 jobs:
-  build-app:
+  build:
     runs-on: windows-latest
-    outputs:
-      artifactPaths: ${{ steps.tauri-build.outputs.artifactPaths }}
+    name: build binaries
     steps:
-      - name: cargo cache
+      - uses: actions/checkout@v3
+      - name: ~/.cargo/ cache
         uses: actions/cache@v1
         with:
           path: ~/.cargo
@@ -38,7 +25,7 @@ jobs:
             ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.toml') }}
             ${{ runner.os }}-cargo
 
-      - name: cargo target/ cache
+      - name: target/ cache
         uses: actions/cache@v1
         with:
           path: target
@@ -56,8 +43,6 @@ jobs:
             ${{ runner.os }}-node-modules-${{ hashFiles('**/ui/package.json') }}
             ${{ runner.os }}-node-modules
 
-      - uses: actions/checkout@v3
-
       - name: setup node
         uses: actions/setup-node@v3
         with:
@@ -71,21 +56,13 @@ jobs:
 
       - uses: tauri-apps/tauri-action@v0
         name: building app
-        if: ${{ github.event.inputs.buildOnly == '' }} # basically any value is considered "true", since it always gets evaluated as a string
+        id: tauri
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: create release notes
-        id: build_changelog
-        if: ${{ github.event.inputs.buildOnly != '' }}
-        uses: mikepenz/release-changelog-builder-action@v3.7.0
-
-      - uses: tauri-apps/tauri-action@v0
-        name: building app and creating release
-        if: ${{ github.event.inputs.buildOnly != '' }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          releaseName: ${{ inputs.releaseName }}
-          releaseBody: ${{ steps.build_changelog.outputs.changelog }}
-          prerelease: ${{ inputs.prerelease }}
-          releaseDraft: true
+      - name: upload app artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: app-artifacts
+          path: target\release\bundle/msi/chats-controller_0.0.0_x64_en-US.msi
+          retention-days: 1
