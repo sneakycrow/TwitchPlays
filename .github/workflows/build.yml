@@ -71,18 +71,18 @@ jobs:
 
       - uses: tauri-apps/tauri-action@v0
         name: building app
-        if: ${{ inputs.buildOnly == true }}
+        if: ${{ github.event.inputs.buildOnly == '' }} # basically any value is considered "true", since it always gets evaluated as a string
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: create release notes
         id: build_changelog
-        if: ${{ inputs.buildOnly != true }}
+        if: ${{ github.event.inputs.buildOnly != '' }}
         uses: mikepenz/release-changelog-builder-action@v3.7.0
 
       - uses: tauri-apps/tauri-action@v0
         name: building app and creating release
-        if: ${{ inputs.buildOnly != true }}
+        if: ${{ github.event.inputs.buildOnly != '' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           releaseName: ${{ inputs.releaseName }}
