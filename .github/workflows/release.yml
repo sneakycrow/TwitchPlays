@@ -24,6 +24,8 @@ jobs:
     runs-on: ubuntu-22.04
     needs: [ build ]
     steps:
+      - uses: actions/checkout@v3
+
       - name: download binaries
         uses: actions/download-artifact@v3
         with:
