@@ -1,0 +1,3 @@
+.controller circle:hover, .controller rect:hover, .controller polygon:hover {
+  fill: skyblue;
+}

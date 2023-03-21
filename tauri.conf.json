@@ -1,8 +1,8 @@
 {
   "build": {
-    "beforeBuildCommand": "npm run build && npm run export",
+    "beforeBuildCommand": "npm run build",
     "beforeDevCommand": "npm run dev",
-    "devPath": "http://localhost:3000",
+    "devPath": "http://localhost:5173",
     "distDir": "./ui/out",
     "withGlobalTauri": true
   },
@@ -41,9 +41,12 @@
         "fullscreen": false,
         "resizable": true,
         "title": "Chats Controller",
-        "width": 800,
-        "height": 600
+        "width": 1280,
+        "height": 700,
+        "transparent": true,
+        "titleBarStyle": "transparent"
       }
-    ]
+    ],
+    "macOSPrivateApi": true
   }
 }
