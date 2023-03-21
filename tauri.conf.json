@@ -3,7 +3,7 @@
     "beforeBuildCommand": "npm run build",
     "beforeDevCommand": "npm run dev",
     "devPath": "http://localhost:5173",
-    "distDir": "./ui/out",
+    "distDir": "./ui/dist",
     "withGlobalTauri": true
   },
   "package": {
@@ -44,7 +44,7 @@
         "width": 1280,
         "height": 700,
         "transparent": true,
-        "titleBarStyle": "transparent"
+        "titleBarStyle": "Transparent"
       }
     ],
     "macOSPrivateApi": true
