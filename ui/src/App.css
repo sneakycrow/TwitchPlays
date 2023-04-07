@@ -1,3 +1,9 @@
 .controller circle:hover, .controller rect:hover, .controller polygon:hover {
-  fill: skyblue;
+    fill: skyblue;
 }
+
+.wrapper {
+    background: white;
+    color: black;
+}
+
