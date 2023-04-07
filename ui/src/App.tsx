@@ -14,8 +14,8 @@ function App() {
 
     fn().catch(e => console.error(e));
     return (
-        <div className="flex bg-white justify-center items-center">
-            <h1 className="text-3xl text-black font-sans">{message}</h1>
+        <div className="flex bg-white justify-center align-center items-center h-screen">
+            <h1 className="text-7xl text-black font-sans text-center">{message}</h1>
         </div>
     )
 }
