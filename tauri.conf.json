@@ -42,9 +42,7 @@
         "resizable": true,
         "title": "Chats Controller",
         "width": 1280,
-        "height": 700,
-        "transparent": true,
-        "titleBarStyle": "Transparent"
+        "height": 900
       }
     ],
     "macOSPrivateApi": true
