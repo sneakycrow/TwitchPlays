@@ -4,7 +4,6 @@ import './App.css'
 import {listen} from '@tauri-apps/api/event'
 
 function App() {
-    const [count, setCount] = useState(0)
     const [message, setMessage] = useState("");
 
     const fn = async () => {
