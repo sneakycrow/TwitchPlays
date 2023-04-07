@@ -59,7 +59,7 @@ fn main() {
                     }
                 });
 
-                client.join(String::from("moistcr1tikal")).unwrap();
+                client.join(String::from("zackrawrr")).unwrap();
 
                 join_handle.await.unwrap();
             });
