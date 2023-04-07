@@ -1,10 +1,8 @@
 import {useState} from 'react'
-import SVG from 'react-inlinesvg';
-import './App.css'
 import {listen} from '@tauri-apps/api/event'
 
 function App() {
-    const [message, setMessage] = useState("");
+    const [message, setMessage] = useState("example message");
 
     const fn = async () => {
         await listen('send_message', (event) => {
@@ -16,15 +14,8 @@ function App() {
 
     fn().catch(e => console.error(e));
     return (
-        <div className="wrapper">
-            <SVG
-                src="/controller.svg"
-                width={1200}
-                height="auto"
-                title="React"
-                className="controller"
-            />
-            <p>{message}</p>
+        <div className="flex bg-white justify-center items-center">
+            <h1 className="text-3xl text-black font-sans">{message}</h1>
         </div>
     )
 }
