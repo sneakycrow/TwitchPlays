@@ -1,33 +1,16 @@
 #![allow(non_snake_case)]
 
-use dioxus::prelude::*;
 use tracing::{event, Level};
 use twitch_irc::{ClientConfig, SecureTCPTransport, TwitchIRCClient};
 use twitch_irc::login::StaticLoginCredentials;
 use twitch_irc::message::ServerMessage::Privmsg;
 
+use crate::components::App;
+
+mod components;
+
 fn main() {
     dioxus_desktop::launch(App);
-}
-
-fn App(cx: Scope) -> Element {
-    cx.render(rsx! {
-        div {
-            "Hello, world!"
-        },
-        Button {}
-    })
-}
-
-fn Button(cx: Scope) -> Element {
-    cx.render(rsx! {
-        button {
-            onclick: move |event| {
-                println!("Clicked! Event: {event:?}")
-            },
-            "Click me!"
-        }
-    })
 }
 
 async fn connect_to_chat() {
