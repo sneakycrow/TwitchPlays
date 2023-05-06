@@ -8,6 +8,8 @@ repository = "sneakycrow/chats-controller"
 edition = "2021"
 
 [dependencies]
+dioxus = "0.3.2"
+dioxus-desktop = "0.3.0"
 tokio = { version = "1.27.0", features = ["full"] }
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter", "time"] }
