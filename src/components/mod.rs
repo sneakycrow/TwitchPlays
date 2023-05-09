@@ -6,17 +6,19 @@ use twitch_irc::message::ServerMessage::Privmsg;
 
 pub(crate) fn App(cx: Scope) -> Element {
     let config = ClientConfig::default();
-
+    let mut current_message = use_state(cx, || "no message".to_string());
     let (mut incoming_messages, client) =
         TwitchIRCClient::<SecureTCPTransport, StaticLoginCredentials>::new(config);
-    let chat: &Coroutine<()> = use_coroutine(cx, |rx| async move {
-        // Create an instance of Analyzer for executing thresholds and triggers
-        // Spawn an async instance that catches the messages
-        client.join(String::from("zackrawrr")).unwrap();
-        while let Some(message) = incoming_messages.recv().await {
-            match message {
-                Privmsg(msg) => {
-                    event!(
+    let chat: &Coroutine<()> = use_coroutine(cx, |rx| {
+        let current_message = current_message.to_owned();
+        async move {
+            // Create an instance of Analyzer for executing thresholds and triggers
+            // Spawn an async instance that catches the messages
+            client.join(String::from("criken")).unwrap();
+            while let Some(message) = incoming_messages.recv().await {
+                match message {
+                    Privmsg(msg) => {
+                        event!(
                             target: "chat_messages",
                             Level::INFO,
                             channel = msg.channel_login,
@@ -25,22 +27,26 @@ pub(crate) fn App(cx: Scope) -> Element {
                             server_timestamp = msg.server_timestamp.to_string(),
                             id = msg.message_id,
                         );
-                    let message = format!(
-                        "[{}] {}: {}",
-                        msg.server_timestamp.format("%H:%M:%S"),
-                        msg.sender.name,
-                        msg.message_text
-                    );
+                        let updated_message = msg.message_text;
+                        current_message.set(updated_message.to_owned());
+                    }
+                    _ => {}
                 }
-                _ => {}
             }
         }
     });
     cx.render(rsx! {
         div {
-            "test"
+            "{current_message}"
         },
-        Button {}
+        Button {},
+        if *current_message.get() == "OMEGALUL" {
+            cx.render(rsx! {
+                div {
+                    "THIS IS ANOTHER DIV"
+                }
+            })
+        }
     })
 }
 
